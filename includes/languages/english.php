@@ -52,7 +52,7 @@ define('TITLE', STORE_NAME);
 define('HEADER_TITLE_MY_ACCOUNT', 'My Account');
 
 // text in includes/application_top.php
-define('HEADER_TITLE_TOP', '<i class="fa fa-home"><span class="sr-only">Home</span></i>');
+define('HEADER_TITLE_TOP', '<i class="fas fa-home"></i><span class="sr-only"> Home</span>');
 define('HEADER_TITLE_CATALOG', 'Catalog');
 
 // text for gender
@@ -69,9 +69,6 @@ define('PULL_DOWN_DEFAULT', 'Please Select');
 
 // javascript messages
 define('JS_ERROR', 'Errors have occured during the process of your form.\n\nPlease make the following corrections:\n\n');
-
-define('JS_REVIEW_TEXT', '* The \'Review Text\' must have at least ' . REVIEW_TEXT_MIN_LENGTH . ' characters.\n');
-define('JS_REVIEW_RATING', '* You must rate the product for your review.\n');
 
 define('JS_ERROR_NO_PAYMENT_MODULE_SELECTED', '* Please select a payment method for your order.\n');
 
@@ -165,7 +162,6 @@ define('IMAGE_BUTTON_CONTINUE', 'Continue');
 define('IMAGE_BUTTON_DELETE', 'Delete');
 define('IMAGE_BUTTON_LOGIN', 'Sign In');
 define('IMAGE_BUTTON_IN_CART', 'Add to Cart');
-define('IMAGE_BUTTON_REVIEWS', 'Reviews');
 define('IMAGE_BUTTON_SEARCH', 'Search');
 define('IMAGE_BUTTON_UPDATE', 'Update');
 define('IMAGE_BUTTON_WRITE_REVIEW', 'Write Review');
@@ -200,11 +196,11 @@ define('TEXT_SEARCH_PLACEHOLDER','Search');
 
 // message for required inputs
 define('FORM_REQUIRED_INFORMATION', '<span class="fa fa-asterisk text-danger"></span> Required information');
-define('FORM_REQUIRED_INPUT', '<span><span class="fa fa-asterisk form-control-feedback text-danger"></span></span>');
+define('FORM_REQUIRED_INPUT', '<span class="form-control-feedback text-danger"><span class="fa fa-asterisk"></span></span>');
 
 // reviews
-define('REVIEWS_TEXT_RATED', 'Rated %s by <cite title="%s" itemprop="author">%s</cite>');
-define('REVIEWS_TEXT_AVERAGE', 'Average rating based on <span itemprop="ratingCount">%s</span> review(s) %s');
+define('REVIEWS_TEXT_RATED', 'Rated %s by <cite title="%s">%s</cite>');
+define('REVIEWS_TEXT_AVERAGE', 'Average rating based on %s review(s) %s');
 define('REVIEWS_TEXT_TITLE', 'What our customers say...');
 
 // grid/list

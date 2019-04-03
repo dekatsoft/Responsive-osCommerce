@@ -84,9 +84,13 @@
     global $cPath_array;
 
     if ($current_category_id == '') {
-      $cPath_new = implode('_', $cPath_array);
+      if (!isset($cPath_array) || (sizeof($cPath_array) == 0)) {
+        $cPath_new = '';
+      } else {
+        $cPath_new = implode('_', $cPath_array);
+      }
     } else {
-      if (sizeof($cPath_array) == 0) {
+      if (!isset($cPath_array) || (sizeof($cPath_array) == 0)) {
         $cPath_new = $current_category_id;
       } else {
         $cPath_new = '';
@@ -122,8 +126,7 @@
 
     $get_url = '';
 
-    reset($_GET);
-    while (list($key, $value) = each($_GET)) {
+    foreach ($_GET as $key => $value) {
       if (($key != tep_session_name()) && ($key != 'error') && (!in_array($key, $exclude_array))) $get_url .= $key . '=' . $value . '&';
     }
 
@@ -477,7 +480,7 @@
   function tep_get_uprid($prid, $params) {
     $uprid = $prid;
     if ( (is_array($params)) && (!strstr($prid, '{')) ) {
-      while (list($option, $value) = each($params)) {
+      foreach ($params as $option => $value) {
         $uprid = $uprid . '{' . $option . '}' . $value;
       }
     }
@@ -492,6 +495,8 @@
   }
 
   function tep_get_languages() {
+    $languages_array = array();
+    
     $languages_query = tep_db_query("select languages_id, name, code, image, directory from " . TABLE_LANGUAGES . " order by sort_order");
     while ($languages = tep_db_fetch_array($languages_query)) {
       $languages_array[] = array('id' => $languages['languages_id'],
@@ -806,8 +811,7 @@
 ////
 // Alias function for module configuration keys
   function tep_mod_select_option($select_array, $key_name, $key_value) {
-    reset($select_array);
-    while (list($key, $value) = each($select_array)) {
+    foreach ($select_array as $key => $value) {
       if (is_int($key)) $key = $value;
       $string .= '<br /><input type="radio" name="configuration[' . $key_name . ']" value="' . $key . '"';
       if ($key_value == $key) $string .= ' checked="checked"';
@@ -1163,7 +1167,7 @@
     if (SEND_EMAILS != 'true') return false;
 
     // Instantiate a new mail object
-    $message = new email(array('X-Mailer: osCommerce'));
+    $message = new email();
 
     // Build the text version
     $text = strip_tags($email_text);
@@ -1587,7 +1591,7 @@
   }
 
 
-  function tep_draw_customers($name, $parameters = '') {
+  function tep_draw_customers($name, $parameters = '', $selected = '') {
     $select_string = '<select name="' . $name . '"';
     if ($parameters) {
       $select_string .= ' ' . $parameters;
@@ -1597,7 +1601,14 @@
 
     $customers_query = tep_db_query("select customers_id, customers_firstname, customers_lastname from " . TABLE_CUSTOMERS . " order by customers_lastname");
     while ($customers = tep_db_fetch_array($customers_query)) {
-       $select_string .= '<option value="' . $customers['customers_id'] . '">' . $customers['customers_lastname'] . ', ' . $customers['customers_firstname'] . '</option>';
+             
+      $select_string .= '<option value="' .$customers['customers_id'] . '"';
+      if ($selected == $customers['customers_id']) {
+        $select_string .= ' selected="selected"';
+      } 
+      $select_string .= '>';
+      $select_string .=  $customers['customers_lastname'] . ', ' . $customers['customers_firstname'];
+      $select_string .= '</option>';
     }
 
     $select_string .= '</select>';

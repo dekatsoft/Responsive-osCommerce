@@ -21,7 +21,7 @@
 
   if (isset($_POST['transaction_id']) && is_numeric($_POST['transaction_id']) && ($_POST['transaction_id'] > 0)) {
     if ($_POST['md5sig'] == strtoupper(md5(MODULE_PAYMENT_MONEYBOOKERS_MERCHANT_ID . $_POST['transaction_id'] . strtoupper(md5(MODULE_PAYMENT_MONEYBOOKERS_SECRET_WORD)) . $_POST['mb_amount'] . $_POST['mb_currency'] . $_POST['status']))) {
-      $order_query = tep_db_query("select orders_status, currency, currency_value from " . TABLE_ORDERS . " where orders_id = '" . $_POST['transaction_id'] . "' and customers_id = '" . (int)$_POST['osc_custid'] . "'");
+      $order_query = tep_db_query("select orders_status, currency, currency_value from orders where orders_id = '" . $_POST['transaction_id'] . "' and customers_id = '" . (int)$_POST['osc_custid'] . "'");
       if (tep_db_num_rows($order_query) > 0) {
         $pass = true;
 
@@ -54,7 +54,7 @@
                                 'customer_notified' => '0',
                                 'comments' => 'Moneybookers Verified [' . $comment_status . ']');
 
-        tep_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+        tep_db_perform('orders_status_history', $sql_data_array);
       }
     }
   }
@@ -64,15 +64,13 @@
                   'MD5: ' . strtoupper(md5(MODULE_PAYMENT_MONEYBOOKERS_MERCHANT_ID . (isset($_POST['transaction_id']) ? $_POST['transaction_id'] : '') . strtoupper(md5(MODULE_PAYMENT_MONEYBOOKERS_SECRET_WORD)) . (isset($_POST['mb_amount']) ? $_POST['mb_amount'] : '') . (isset($_POST['mb_currency']) ? $_POST['mb_currency'] : '') . (isset($_POST['status']) ? $_POST['status'] : ''))) . "\n\n" .
                   '$_POST:' . "\n\n";
 
-    reset($_POST);
-    while (list($key, $value) = each($_POST)) {
+    foreach($_POST as $key => $value) {
       $email_body .= $key . '=' . $value . "\n";
     }
 
     $email_body .= "\n" . '$_GET:' . "\n\n";
 
-    reset($_GET);
-    while (list($key, $value) = each($_GET)) {
+    foreach($_GET as $key => $value) {
       $email_body .= $key . '=' . $value . "\n";
     }
 

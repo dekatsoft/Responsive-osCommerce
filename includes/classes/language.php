@@ -76,7 +76,7 @@
                                'zu' => 'zu|zulu');
 
       $this->catalog_languages = array();
-      $languages_query = tep_db_query("select languages_id, name, code, image, directory from " . TABLE_LANGUAGES . " order by sort_order");
+      $languages_query = tep_db_query("select languages_id, name, code, image, directory from languages order by sort_order");
       while ($languages = tep_db_fetch_array($languages_query)) {
         $this->catalog_languages[$languages['code']] = array('id' => $languages['languages_id'],
                                                              'name' => $languages['name'],
@@ -102,8 +102,7 @@
       $this->browser_languages = explode(',', getenv('HTTP_ACCEPT_LANGUAGE'));
 
       for ($i=0, $n=sizeof($this->browser_languages); $i<$n; $i++) {
-        reset($this->languages);
-        while (list($key, $value) = each($this->languages)) {
+        foreach($this->languages as $key => $value) {
           if (preg_match('/^(' . $value . ')(;q=[0-9]\\.[0-9])?$/i', $this->browser_languages[$i]) && isset($this->catalog_languages[$key])) {
             $this->language = $this->catalog_languages[$key];
             break 2;
