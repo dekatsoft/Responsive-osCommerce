@@ -9,21 +9,18 @@
 
   Released under the GNU General Public License
 */
-
-  $compat_register_globals = true;
-
 ?>
 
 <div class="alert alert-info" role="alert">
-  <h1>Welcome to osCommerce Online Merchant v<?php echo osc_get_version(); ?>!</h1>
+  <h1>Welcome to OSCOM v<?php echo osc_get_version(); ?>!</h1>
 
-  <p>osCommerce Online Merchant helps you sell products worldwide with your own online store. Its Administration Tool manages products, customers, orders, newsletters, specials, and more to successfully build the success of your online business.</p>
-  <p>osCommerce has attracted a large community of store owners and developers who support each other and have provided over 7,000 free add-ons that can extend the features and potential of your online store.</p>
+  <p>OSCOM CE Phoenix helps you sell products worldwide with your own online store. Its Administration Tool manages products, customers, orders, newsletters, specials, and more to successfully build the success of your online business.</p>
+  <p>osCommerce has attracted a large community of store owners and developers who support each other and have provided thousands of free and paid-for add-ons that can extend the features and potential of your online store.</p>
 </div>
 
 <div class="row">
   <div class="col-sm-12 col-md-9 order-last">
-    
+
     <h1 class="h4">New Installation</h1>
 
 <?php
@@ -47,14 +44,8 @@
 
     $warning_array = array();
 
-    if (function_exists('ini_get')) {
-      if ($compat_register_globals == false) {
-        $warning_array['register_globals'] = 'Compatibility with register_globals is supported from PHP 4.3+. This setting <u>must be enabled</u> due to an older PHP version being used.';
-      }
-    }
-
-    if (!extension_loaded('mysql') && !extension_loaded('mysqli')) {
-      $warning_array['mysql'] = 'The MySQLi or older MySQL extension is required but is not installed. Please enable either to continue installation.';
+    if (!extension_loaded('mysqli')) {
+      $warning_array['mysql'] = 'The MySQLi extension is required but is not installed. Please enable the extension to continue installation.';
     }
 
     if ((sizeof($configfile_array) > 0) || (sizeof($warning_array) > 0)) {
@@ -152,30 +143,20 @@ $(function() {
   </div>
   <div class="col-sm-12 col-md-3 order-first">
     <h2 class="h4">Server Capabilities</h2>
-    
+
     <table class="table table-condensed table-striped">
       <tr>
         <th colspan="3">PHP Version</th>
       </tr>
       <tr>
         <th><?php echo PHP_VERSION; ?></th>
-        <td colspan="2" align="right"><?php echo ((PHP_VERSION >= 5.3) ? '<i class="fas fa-thumbs-up text-success"></i>' : '<i class="fas fa-thumbs-down text-danger"></i>'); ?></td>
+        <td colspan="2" align="right"><?php echo ((PHP_VERSION >= 7) ? '<i class="fas fa-thumbs-up text-success"></i>' : '<i class="fas fa-thumbs-down text-danger"></i>'); ?></td>
       </tr>
 <?php
   if (function_exists('ini_get')) {
 ?>
       <tr>
         <th colspan="3">PHP Settings</th>
-      </tr>
-      <tr>
-        <th>register_globals</th>
-        <td align="right"><?php echo (((int)ini_get('register_globals') == 0) ? 'Off' : 'On'); ?></td>
-        <td align="right"><?php echo (($compat_register_globals == true) ? '<i class="fas fa-thumbs-up text-success"></i>' : '<i class="fas fa-thumbs-down text-danger"></i>'); ?></td>
-      </tr>
-      <tr>
-        <th>magic_quotes</th>
-        <td align="right"><?php echo (((int)ini_get('magic_quotes') == 0) ? 'Off' : 'On'); ?></td>
-        <td align="right"><?php echo (((int)ini_get('magic_quotes') == 0) ? '<i class="fas fa-thumbs-up text-success"></i>' : '<i class="fas fa-thumbs-down text-danger"></i>'); ?></td>
       </tr>
       <tr>
         <th>file_uploads</th>
@@ -197,7 +178,7 @@ $(function() {
       </tr>
       <tr>
         <th>MySQL<?php echo extension_loaded('mysqli') ? 'i' : ''; ?></th>
-        <td colspan="2" align="right"><?php echo (extension_loaded('mysql') || extension_loaded('mysqli') ? '<i class="fas fa-thumbs-up text-success"></i>' : '<i class="fas fa-thumbs-down text-danger"></i>'); ?></td>
+        <td colspan="2" align="right"><?php echo (extension_loaded('mysqli') ? '<i class="fas fa-thumbs-up text-success"></i>' : '<i class="fas fa-thumbs-down text-danger"></i>'); ?></td>
       </tr>
       <tr>
         <th colspan="3">Recommended Extensions</th>

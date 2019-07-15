@@ -345,6 +345,8 @@
     static $button_counter = 1;
 
     $types = array('submit', 'button', 'reset');
+    
+    if ( !is_array($params) ) $params = array();
 
     if ( !isset($params['type']) ) {
       $params['type'] = 'submit';
@@ -381,7 +383,7 @@
 
     $button .= ' class="btn ';
 
-    $button .= (isset($style)) ? $style : 'btn-default';
+    $button .= (isset($style)) ? $style : 'btn-outline-secondary';
 
     $button .= '">';
 
