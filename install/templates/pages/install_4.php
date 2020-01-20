@@ -46,7 +46,7 @@
     </div>
   </div>
   <div class="col-sm-3">
-    <div class="card">
+    <div class="card mb-2">
       <div class="card-body">
         <ol>
           <li class="text-muted">Database Server</li>
@@ -67,7 +67,7 @@
 <div class="w-100"></div>
 
 <div class="row">
-  <div class="col-xs-12 col-sm-9">
+  <div class="col-12 col-sm-9">
 
     <h2 class="h4">Finished!</h2>
     
@@ -197,14 +197,15 @@
     <br />
 
     <div class="row">
-      <div class="col"><?php echo osc_draw_button('Online Store (Frontend)', 'cart', $http_server . $http_catalog . 'index.php', 'primary', array('newwindow' => 1), 'btn-success btn-block'); ?></div>
       <div class="col"><?php echo osc_draw_button('Administration Tool (Backend)', 'locked', $http_server . $http_catalog . $admin_folder . '/index.php', 'primary', array('newwindow' => 1), 'btn-info btn-block'); ?></div>
+      <div class="col"><?php echo osc_draw_button('Online Store (Frontend)', 'cart', $http_server . $http_catalog . 'index.php', 'primary', array('newwindow' => 1), 'btn-success btn-block'); ?></div>      
+      <div class="col"><?php echo osc_draw_button('Phoenix Club', null, 'https://forums.oscommerce.com/clubs/1-phoenix/', 'primary', array('newwindow' => 1), 'btn-danger btn-block'); ?></div>
     </div>
   </div>
   
-  <div class="col-xs-12 col-sm-3">
+  <div class="col-12 col-sm-3">
     <h2 class="h4">Step 4</h2>
-    <div class="card">
+    <div class="card mb-2">
       <div class="card-body">      
         <p>Congratulations on installing and configuring OSCOM CE Phoenix as your online store solution!</p>
         <p>We wish you all the best with the success of your online store and welcome you to join and participate in our community.</p>

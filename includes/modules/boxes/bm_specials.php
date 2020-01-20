@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2019 osCommerce
+  Copyright (c) 2020 osCommerce
 
   Released under the GNU General Public License
 */
@@ -33,7 +33,7 @@
     function execute() {
       global $languages_id, $currencies, $oscTemplate;
 
-      if ($random_product = tep_random_select("select p.*, pd.*, s.*,  m.*, p.products_quantity as in_stock, s.specials_new_products_price as final_price from products p left join manufacturers m on p.manufacturers_id = m.manufacturers_id, products_description pd, specials s where p.products_status = '1' and p.products_id = s.products_id and pd.products_id = s.products_id and pd.language_id = '" . (int)$languages_id . "' and s.status = '1' order by s.specials_date_added desc limit " . MAX_RANDOM_SELECT_SPECIALS)) {
+      if ($random_product = tep_random_select("select p.*, pd.*, s.*, p.products_quantity as in_stock, s.specials_new_products_price as final_price from products p, products_description pd, specials s where p.products_status = '1' and p.products_id = s.products_id and pd.products_id = s.products_id and pd.language_id = '" . (int)$languages_id . "' and s.status = '1' order by s.specials_date_added desc limit " . MAX_RANDOM_SELECT_SPECIALS)) {
         $data['data-is-special'] = 1;
         $data['data-product-price'] = $currencies->display_raw($random_product['final_price'], tep_get_tax_rate($random_product['products_tax_class_id']));
         $data['data-product-manufacturer'] = max(0, (int)$random_product['manufacturers_id']);
@@ -50,10 +50,8 @@
         // product price
         $box_price = sprintf(IS_PRODUCT_SHOW_PRICE_SPECIAL, $currencies->display_price($random_product['products_price'], tep_get_tax_rate($random_product['products_tax_class_id'])), $currencies->display_price($random_product['specials_new_products_price'], tep_get_tax_rate($random_product['products_tax_class_id'])));
 
-        ob_start();
-        include('includes/modules/boxes/templates/tpl_' . basename(__FILE__));
-        $data = ob_get_clean();
-        $oscTemplate->addBlock($data, $this->group);
+        $tpl_data = ['group' => $this->group, 'file' => __FILE__];
+        include 'includes/modules/block_template.php';
       }
     }
 

@@ -249,7 +249,7 @@
         }
       }
     } else {
-      $cPath_new = implode('_', $cPath_array);
+      $cPath_new = implode('_', (array)$cPath_array);
     }
 
     return 'cPath=' . $cPath_new;
@@ -889,7 +889,7 @@
 
     if ($sortby) {
 	  $sort_prefix = '<a href="' . tep_href_link($PHP_SELF, tep_get_all_get_params(array('info', 'sort', 'page')) . 'sort=' . $colnum . ($sortby == $colnum . 'a' ? 'd' : 'a')) . '" title="' . tep_output_string(TEXT_SORT_PRODUCTS . ($sortby == $colnum . 'd' || substr($sortby, 0, 1) != $colnum ? TEXT_ASCENDINGLY : TEXT_DESCENDINGLY) . TEXT_BY . $heading) . '" class="dropdown-item">' ;
-      $sort_suffix = (substr($sortby, 0, 1) == $colnum ? (substr($sortby, 1, 1) == 'a' ? '+' : '-') : '') . '</a>';
+      $sort_suffix = (substr($sortby, 0, 1) == $colnum ? (substr($sortby, 1, 1) == 'a' ? LISTING_SORT_DOWN : LISTING_SORT_UP) : LISTING_SORT_UNSELECTED) . '</a>';
     }
 
     return $sort_prefix . $heading . $sort_suffix;

@@ -113,7 +113,7 @@
     }
   }
 
-  $account_query = tep_db_query("select customers_gender, customers_firstname, customers_lastname, customers_dob, customers_email_address, customers_telephone, customers_fax from customers where customers_id = '" . (int)$customer_id . "'");
+  $account_query = tep_db_query("select * from customers where customers_id = '" . (int)$customer_id . "'");
   $account = tep_db_fetch_array($account_query);
 
   $breadcrumb->add(NAVBAR_TITLE_1, tep_href_link('account.php', '', 'SSL'));
@@ -146,7 +146,7 @@
     }
     $female = !$male;
   ?>
-  <div class="form-group row">  
+  <div class="form-group row align-items-center">  
     <label class="col-form-label col-sm-3 text-left text-sm-right"><?php echo ENTRY_GENDER; ?></label>
     <div class="col-sm-9">
       <div class="form-check form-check-inline">

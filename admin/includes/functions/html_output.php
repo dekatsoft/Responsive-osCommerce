@@ -236,7 +236,7 @@
 
 ////
 // Output a selection field - alias function for tep_draw_checkbox_field() and tep_draw_radio_field()
-  function tep_draw_selection_field($name, $type, $value = '', $checked = false, $compare = '') {
+  function tep_draw_selection_field($name, $type, $value = '', $checked = false, $compare = '', $parameters = null) {
     $selection = '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '"';
 
     if (tep_not_null($value)) $selection .= ' value="' . tep_output_string($value) . '"';
@@ -244,6 +244,8 @@
     if ( ($checked == true) || (isset($_GET[$name]) && is_string($_GET[$name]) && (($_GET[$name] == 'on') || (stripslashes($_GET[$name]) == $value))) || (isset($_POST[$name]) && is_string($_POST[$name]) && (($_POST[$name] == 'on') || (stripslashes($_POST[$name]) == $value))) || (tep_not_null($compare) && ($value == $compare)) ) {
       $selection .= ' checked="checked"';
     }
+    
+    if (tep_not_null($parameters)) $selection .= ' ' . $parameters;
 
     $selection .= ' />';
 
@@ -252,12 +254,14 @@
 
 ////
 // Output a form checkbox field
+// DEPRECATE this from Phoenix over time.
   function tep_draw_checkbox_field($name, $value = '', $checked = false, $compare = '') {
     return tep_draw_selection_field($name, 'checkbox', $value, $checked, $compare);
   }
 
 ////
 // Output a form radio field
+// DEPRECATE this from Phoenix over time.
   function tep_draw_radio_field($name, $value = '', $checked = false, $compare = '') {
     return tep_draw_selection_field($name, 'radio', $value, $checked, $compare);
   }
@@ -430,4 +434,74 @@
 
     return $button;
   }
-?>
+  
+////
+// Output a Bootstrap Button
+  function tep_draw_bootstrap_button($title = null, $icon = null, $link = null, $priority = null, $params = null, $style = null) {
+    $types = array('submit', 'button', 'reset');
+    
+    if ( !is_array($params) ) $params = array();
+
+    if ( !isset($params['type']) ) {
+      $params['type'] = 'submit';
+    }
+
+    if ( !in_array($params['type'], $types) ) {
+      $params['type'] = 'submit';
+    }
+
+    if ( ($params['type'] == 'submit') && isset($link) ) {
+      $params['type'] = 'button';
+    }
+
+    if (!isset($priority)) {
+      $priority = 'secondary';
+    }
+
+    $button = NULL;
+
+    if ( ($params['type'] == 'button') && isset($link) ) {
+      $button .= '<a href="' . $link . '"';
+
+      if ( isset($params['newwindow']) ) {
+        $button .= ' target="_blank" rel="noopener"';
+      }
+    } else {
+      $button .= '<button ';
+      $button .= ' type="' . tep_output_string($params['type']) . '"';
+    }
+
+    if ( isset($params['params']) ) {
+      $button .= ' ' . $params['params'];
+    }
+
+    $button .= ' class="btn ';
+
+    $button .= (isset($style)) ? $style : 'btn-outline-secondary';
+
+    $button .= '">';
+
+    if (isset($icon) && tep_not_null($icon)) {
+      $button .= ' <span class="' . $icon . '" aria-hidden="true"></span> ';
+    }
+
+    $button .= $title;
+
+    if ( ($params['type'] == 'button') && isset($link) ) {
+      $button .= '</a>';
+    } else {
+      $button .= '</button>';
+    }
+
+    return $button;
+  }
+  
+  // review stars
+  function tep_draw_stars($rating = 0) {
+    $star_rating = round($rating, 0, PHP_ROUND_HALF_UP);
+    $stars = str_repeat('<i class="fas fa-star"></i>', $star_rating);
+    $stars .= str_repeat('<i class="far fa-star"></i>', 5-$star_rating);
+
+    return '<span class="text-warning" title="' . $rating . '">' . $stars . '</span>';
+  }
+  
