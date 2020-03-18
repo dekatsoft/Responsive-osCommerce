@@ -165,21 +165,21 @@
     <div class="form-group row">
       <label for="Module" class="col-form-label col-sm-3 text-left text-sm-right"><?php echo TEXT_NEWSLETTER_MODULE; ?></label>
       <div class="col-sm-9">
-        <?php echo tep_draw_pull_down_menu('module', $modules_array, $nInfo->module, 'id="Module" class="form-control" required aria-required="true"'); ?>
+        <?php echo tep_draw_pull_down_menu('module', $modules_array, $nInfo->module, 'id="Module" required aria-required="true"'); ?>
       </div>
     </div>
 
     <div class="form-group row">
       <label for="Title" class="col-form-label col-sm-3 text-left text-sm-right"><?php echo TEXT_NEWSLETTER_TITLE; ?></label>
       <div class="col-sm-9">
-        <?php echo tep_draw_input_field('title', $nInfo->title, 'class="form-control" id="Title" required aria-required="true"'); ?>
+        <?php echo tep_draw_input_field('title', $nInfo->title, 'id="Title" required aria-required="true"'); ?>
       </div>
     </div>
 
     <div class="form-group row">
       <label for="Content" class="col-form-label col-sm-3 text-left text-sm-right"><?php echo TEXT_NEWSLETTER_CONTENT; ?></label>
       <div class="col-sm-9">
-        <?php echo tep_draw_textarea_field('content', 'soft', '60', '15', $nInfo->content, 'class="form-control" id="Content" required aria-required="true"'); ?>
+        <?php echo tep_draw_textarea_field('content', 'soft', '60', '15', $nInfo->content, 'id="Content" required aria-required="true"'); ?>
       </div>
     </div>
 
@@ -321,7 +321,7 @@
             }
 
             if (isset($nInfo) && is_object($nInfo) && ($newsletters['newsletters_id'] == $nInfo->newsletters_id) ) {
-              echo '<tr onclick="document.location.href=\'' . tep_href_link('newsletters.php', 'page=' . (int)$_GET['page'] . '&nID=' . (int)$nInfo->newsletters_id . '&action=preview') . '\'">';
+              echo '<tr class="table-active" onclick="document.location.href=\'' . tep_href_link('newsletters.php', 'page=' . (int)$_GET['page'] . '&nID=' . (int)$nInfo->newsletters_id . '&action=preview') . '\'">';
             } else {
               echo '<tr onclick="document.location.href=\'' . tep_href_link('newsletters.php', 'page=' . (int)$_GET['page'] . '&nID=' . (int)$newsletters['newsletters_id']) . '\'">';
             }
