@@ -95,12 +95,10 @@
 ////
 // Return a product's name
 // TABLES: products
-  function tep_get_products_name($product_id, $language = '') {
-    global $languages_id;
+  function tep_get_products_name($product_id, $language_id = null) {
+    if (empty($language_id)) $language_id = $_SESSION['languages_id'];
 
-    if (empty($language)) $language = $languages_id;
-
-    $product_query = tep_db_query("SELECT products_name FROM products_description WHERE products_id = " . (int)$product_id . " AND language_id = " . (int)$language);
+    $product_query = tep_db_query("SELECT products_name FROM products_description WHERE products_id = " . (int)$product_id . " AND language_id = " . (int)$language_id);
     $product = tep_db_fetch_array($product_query);
 
     return $product['products_name'];
@@ -348,11 +346,9 @@
   }
 
   function tep_get_categories($categories_array = '', $parent_id = '0', $indent = '') {
-    global $languages_id;
-
     if (!is_array($categories_array)) $categories_array = [];
 
-    $categories_query = tep_db_query("SELECT c.categories_id, cd.categories_name FROM categories c, categories_description cd WHERE parent_id = " . (int)$parent_id . " AND c.categories_id = cd.categories_id AND cd.language_id = " . (int)$languages_id . " ORDER BY sort_order, cd.categories_name");
+    $categories_query = tep_db_query("SELECT c.categories_id, cd.categories_name FROM categories c, categories_description cd WHERE parent_id = " . (int)$parent_id . " AND c.categories_id = cd.categories_id AND cd.language_id = " . (int)$_SESSION['languages_id'] . " ORDER BY sort_order, cd.categories_name");
     while ($categories = tep_db_fetch_array($categories_query)) {
       $categories_array[] = [
         'id' => $categories['categories_id'],
@@ -930,8 +926,6 @@
   }
 
   function tep_count_customer_orders($id = '', $check_session = true) {
-    global $languages_id;
-
     if (!is_numeric($id)) {
       $id = $_SESSION['customer_id'] ?? 0;
     }
@@ -940,7 +934,7 @@
       return 0;
     }
 
-    $orders_check_query = tep_db_query("SELECT COUNT(*) AS total FROM orders o, orders_status s WHERE o.customers_id = " . (int)$id . " AND o.orders_status = s.orders_status_id AND s.language_id = " . (int)$languages_id . " AND s.public_flag = 1");
+    $orders_check_query = tep_db_query("SELECT COUNT(*) AS total FROM orders o, orders_status s WHERE o.customers_id = " . (int)$id . " AND o.orders_status = s.orders_status_id AND s.language_id = " . (int)$_SESSION['languages_id'] . " AND s.public_flag = 1");
     $orders_check = tep_db_fetch_array($orders_check_query);
 
     return $orders_check['total'];
@@ -982,20 +976,16 @@
    * For use by injectFormVerify hooks and Apps that need to block form processing.
    */
   function tep_block_form_processing() {
-    switch ($GLOBALS['PHP_SELF']) {
-      case 'account_edit.php':
-      case 'create_account.php':
-      case 'password_reset.php':
-        unset($GLOBALS['customer_details']);
-        break;
-      case 'address_book_process.php':
-      case 'checkout_shipping_address.php':
-      case 'checkout_payment_address.php':
-        $GLOBALS['customer_details'] = false;
-        break;
-      case 'advanced_search_result.php':
-      case 'contact_us.php':
-      default:
-        $GLOBALS['error'] = true;
+    $GLOBALS['error'] = true;
+  }
+
+  function tep_form_processing_is_valid() {
+    return !($GLOBALS['error'] ?? false);
+  }
+
+  function tep_require_login($parameters = null) {
+    if (!isset($_SESSION['customer_id'])) {
+      $_SESSION['navigation']->set_snapshot($parameters);
+      tep_redirect(tep_href_link('login.php', '', 'SSL'));
     }
   }

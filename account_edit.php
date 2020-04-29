@@ -12,10 +12,7 @@
 
   require 'includes/application_top.php';
 
-  if (!isset($_SESSION['customer_id'])) {
-    $navigation->set_snapshot();
-    tep_redirect(tep_href_link('login.php', '', 'SSL'));
-  }
+  $OSCOM_Hooks->register_pipeline('loginRequired');
 
   $message_stack_area = 'account_edit';
 // needs to be included earlier to set the success message in the messageStack
@@ -25,7 +22,7 @@
     $customer_details = $customer_data->process($customer_data->get_fields_for_page('account_edit'));
     $OSCOM_Hooks->call('siteWide', 'injectFormVerify');
 
-    if (!empty($customer_details) && is_array($customer_details)) {
+    if (tep_form_processing_is_valid()) {
       $customer_data->update($customer_details, ['id' => $customer->get_id()], 'customers');
       tep_db_query("UPDATE customers_info SET customers_info_date_account_last_modified = NOW() WHERE customers_info_id = " . (int)$customer->get_id());
 

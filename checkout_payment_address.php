@@ -12,22 +12,19 @@
 
   require 'includes/application_top.php';
 
-  $OSCOM_Hooks->register('progress');
-
 // if the customer is not logged on, redirect them to the login page
-  if (!isset($_SESSION['customer_id'])) {
-    $navigation->set_snapshot();
-    tep_redirect(tep_href_link('login.php', '', 'SSL'));
-  }
+  $OSCOM_Hooks->register_pipeline('loginRequired');
 
 // if there is nothing in the customers cart, redirect them to the shopping cart page
-  if ($cart->count_contents() < 1) {
+  if ($_SESSION['cart']->count_contents() < 1) {
     tep_redirect(tep_href_link('shopping_cart.php'));
   }
 
   if (!$customer_data->has('address')) {
     tep_redirect(tep_href_link('checkout_payment.php', '', 'SSL'));
   }
+
+  $OSCOM_Hooks->register('progress');
 
   // needs to be included earlier to set the success message in the messageStack
   require "includes/languages/$language/checkout_payment_address.php";
@@ -39,7 +36,7 @@
   if (tep_validate_form_action_is('submit')) {
     $customer_details = $customer_data->process($customer_data->get_fields_for_page('address_book'));
     $OSCOM_Hooks->call('siteWide', 'injectFormVerify');
-    if ($customer_details) {
+    if (tep_form_processing_is_valid()) {
       $customer_details['id'] = $customer->get_id();
       $customer_data->add_address($customer_details);
 
@@ -61,11 +58,6 @@
       } else {
         unset($_SESSION['billto']);
       }
-    } else {
-      // no addresses to select from - customer decided to keep the current assigned address
-      $_SESSION['billto'] = $customer->get_default_address_id();
-
-      tep_redirect(tep_href_link('checkout_payment.php', '', 'SSL'));
     }
   }
 
@@ -107,7 +99,7 @@
               <td align="text-right">
                 <div class="custom-control custom-radio custom-control-inline">
                   <?php
-                  echo tep_draw_radio_field('address', $address['address_book_id'], ($address['address_book_id'] == $billto), 'id="cpa_' . $address['address_book_id'] . '" aria-describedby="cpa_' . $address['address_book_id'] . '" class="custom-control-input"');
+                  echo tep_draw_radio_field('address', $address['address_book_id'], ($address['address_book_id'] == $_SESSION['billto']), 'id="cpa_' . $address['address_book_id'] . '" aria-describedby="cpa_' . $address['address_book_id'] . '" class="custom-control-input"');
                   ?>
                   <label class="custom-control-label" for="cpa_<?php echo $address['address_book_id']; ?>">&nbsp;</label>
                 </div>
@@ -126,7 +118,7 @@
       <h5 class="mb-1"><?php echo TABLE_HEADING_PAYMENT_ADDRESS; ?></h5>
       <div class="border">
         <ul class="list-group list-group-flush">
-          <li class="list-group-item"><?php echo PAYMENT_FA_ICON . $customer->make_address_label($billto, true, ' ', '<br>'); ?>
+          <li class="list-group-item"><?php echo PAYMENT_FA_ICON . $customer->make_address_label($_SESSION['billto'], true, ' ', '<br>'); ?>
           </li>
         </ul>
       </div>
