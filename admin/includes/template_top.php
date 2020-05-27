@@ -37,7 +37,6 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
   }
 ?>
 
-<link rel="stylesheet" href="includes/stylesheet.css">
 </head>
 <body>
 
@@ -50,13 +49,7 @@ echo $OSCOM_Hooks->call('siteWide', 'injectBodyStart');
 
 <?php
   if (tep_session_is_registered('admin')) {
-    $OSCOM_Hooks->call('siteWide', 'injectPrintablePage');
-    
-    if (!in_array($PHP_SELF, $printable_pages)) {
-      require('includes/header.php');
-    
-      echo $OSCOM_Hooks->call('siteWide', 'injectLeftColumn');
-    }
+    require('includes/header.php');
   } 
 ?>
 

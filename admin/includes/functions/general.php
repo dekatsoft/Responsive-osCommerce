@@ -260,7 +260,7 @@
     if (tep_not_null($image) && (file_exists(DIR_FS_CATALOG_IMAGES . $image)) ) {
       $image = tep_image(HTTP_CATALOG_SERVER . DIR_WS_CATALOG_IMAGES . $image, $alt, $width, $height);
     } else {
-      $image = TEXT_IMAGE_NONEXISTENT;
+      $image = TEXT_IMAGE_NON_EXISTENT;
     }
 
     return $image;
@@ -1454,10 +1454,26 @@ EOSQL
       'account_password',
       'address_book',
       'checkout_new_address',
+      'create_account',
+      'customers',
     ];
 
     $parameters = ['pages' => &$pages];
     $GLOBALS['OSCOM_Hooks']->call('siteWide', 'accountEditPages', $parameters);
 
     return tep_cfg_multiple_select_option($pages, $key_values, $key_name);
+  }
+  
+////
+// Check if product has attributes
+  function tep_has_product_attributes($products_id) {
+    return true;
+  }
+
+  function tep_block_form_processing() {
+    $GLOBALS['error'] = true;
+  }
+
+  function tep_form_processing_is_valid() {
+    return !($GLOBALS['error'] ?? false);
   }
